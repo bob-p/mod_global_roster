@@ -14,7 +14,16 @@ erlc -I /Path/to/ejabberd/src/ src/mod_global_roster.erl
 
 %% Start ejabberd
 
-%% Note eredis is a dependancy and needs to be in your code path (ln all files in ebin to /lib/ejabberd/ebin)
+%% Note eredis is a dependancy and needs to be in your code path
+
+%% Install eredis
+git clone https://github.com/wooga/eredis.git
+
+cd eredis
+
+./rebar compile
+
+%% (ln all files in ebin to /lib/ejabberd/ebin)
 
 %% TODO Erlang/ejabberd versions needed
 
