@@ -8,7 +8,7 @@ erlc -I /Path/to/ejabberd/src/ src/mod_global_roster.erl
 
 %% Add mobule to ejabberd.cfg
   
-  {mod_global_roster, [{key, "roster:", redis_host, "0.0.0.0", redis_port, 6379, redis_db, 0}]}
+  {mod_global_roster, [{key, "roster:"}, {redis_host, "0.0.0.0"}, {redis_port, 6379}, {redis_db, 0}}]}
 
 %% Options above are defaults, overwrite for custom options.
 
