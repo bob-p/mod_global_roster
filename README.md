@@ -4,9 +4,9 @@ mod_global_roster
 %% Compile
 erlc -I /Path/to/ejabberd/src/ src/mod_global_roster.erl
 
-%% mv .beam to /lib/ejabberd/ebin
+%% mv .beam to ejabberd/ebin
 
-%% Add mobule to ejabberd.cfg
+%% Add module to ejabberd.cfg
   
   {mod_global_roster, [{key, "roster:"}, {redis_host, "0.0.0.0"}, {redis_port, 6379}, {redis_db, 0}}]}
 
@@ -23,9 +23,7 @@ cd eredis
 
 ./rebar compile
 
-%% (ln all files in ebin to /lib/ejabberd/ebin)
-
-%% TODO Erlang/ejabberd versions needed
+%% (ln all files in ebin to ejabberd/ebin)
 
 %% Install ejabberd full
 
@@ -42,3 +40,9 @@ cd src
 make
 
 sudo make install
+
+%% Versions
+
+%% Erlang >= OTP_R14A (eredis needs the binary module which seems to have been introduced in this version)
+
+%% Ejabberd tested with 2.1.x but may work on others
