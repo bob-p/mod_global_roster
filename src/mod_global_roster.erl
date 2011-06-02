@@ -20,13 +20,11 @@ stop(Host) ->
 on_presence_joined(User, Server, _Resource, _Packet) ->
   {ok, Client} = eredis:start_link(redis_host(Server), redis_port(Server), redis_db(Server)),
   {ok, <<"1">>} = eredis:q(Client, ["SADD", key_name(Server), User]),
-  ?INFO_MSG("PRESENCE DETECTED!!!!! ~p ~p ~n", [User, Server]),
   none.
 
 on_presence_left(User, Server, _Resource, _Status) ->
   {ok, Client} = eredis:start_link(redis_host(Server), redis_port(Server), redis_db(Server)),
   {ok, <<"1">>} = eredis:q(Client, ["SREM", key_name(Server), User]),
-  ?INFO_MSG("PRESENCE LEFT!!!!!! ~p ~p ~n", [User, Server]),
   none.
 
 key_name(Server) ->
