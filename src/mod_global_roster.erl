@@ -18,13 +18,13 @@ stop(Host) ->
   ok.
   
 on_presence_joined(User, Server, _Resource, _Packet) ->
-  C = client(Server),
-  {ok, <<"1">>} = eredis:q(C, ["SADD", key_name(Server), User]),
+  {ok, Client} = client(Server),
+  {ok, <<"1">>} = eredis:q(Client, ["SADD", key_name(Server), User]),
   none.
 
 on_presence_left(User, Server, _Resource, _Status) ->
-  C = client(Server),
-  {ok, <<"1">>} = eredis:q(C, ["SREM", key_name(Server), User]),
+  {ok, Client} = client(Server),
+  {ok, <<"1">>} = eredis:q(Client, ["SREM", key_name(Server), User]),
   none.
 
 key_name(Server) ->
@@ -41,8 +41,18 @@ redis_db(Server) ->
   gen_mod:get_module_opt(Server, ?MODULE, redis_db, 0).
 
 client(Server) ->
-  {ok, Client} = eredis:start_link(redis_host(Server), redis_port(Server), redis_db(Server)),
-  Client.
+  case whereis(eredis_driver) of
+    undefined ->
+      case eredis:start_link(redis_host(Server), redis_port(Server), redis_db(Server)) of
+        {ok, Client} ->
+          register(eredis_driver, Client),
+          {ok, Client};
+        {error, Reason} ->
+          {error, Reason}
+      end;
+    Pid ->
+      {ok, Pid}
+  end.
 %% TODO
 %% Handle redis errors
 %% Handle redis returning 0 (if item is in set or cannot be removed)
